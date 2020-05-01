@@ -1,3 +1,5 @@
+#ifndef _IBMesh_H_
+#define _IBMesh_H_
 #include <iostream>
 #include <dolfin.h>
 using namespace dolfin;
