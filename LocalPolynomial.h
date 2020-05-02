@@ -7,6 +7,7 @@ using namespace dolfin;
 
 class LocalPolynomial
 {
+public:
     size_t value_size = 3;
     size_t poly_degree = 27;
     Function function;
@@ -19,7 +20,7 @@ class LocalPolynomial
         double y = point.y();
         double z = point.z();
 
-        std::vector<double> polynomial_items;
+        std::vector<double> polynomial_items(poly_degree);
         polynomial_items[0] = 1.0;
         polynomial_items[1] = z;
         polynomial_items[2] = z * z;
@@ -80,28 +81,37 @@ class LocalPolynomial
 
         /// inverse and multipy the right side term.
         Eigen::MatrixXd matrix(poly_degree, poly_degree);
-        for(size_t i = 0; i <poly_degree;i++){
+        for (size_t i = 0; i < poly_degree; i++)
+        {
             Point point(
                 coordinates[i][0],
                 coordinates[i][1],
-                coordinates[i][2]);
+                coordinates[i][2]
+            );
             auto items = evaluate_polynomial_items(point);
-            for(size_t j = 0; j<poly_degree;j++){
-                matrix(i,j) = items[j];
+        std::cout << coordinates.size() << std::endl;
+
+            for (size_t j = 0; j < poly_degree; j++)
+            {
+                matrix(i, j) = items[j];
             }
         }
+
         auto solver = matrix.lu();
         std::vector<std::vector<double>> coefficients;
+
         for (size_t i = 0; i < value_size; i++)
         {
             std::vector<double> coefficient(poly_degree);
             Eigen::VectorXd b(poly_degree);
-            for(size_t j = 0; j <poly_degree; j++){
-                b(j)=dofs[i*poly_degree+j];
+            for (size_t j = 0; j < poly_degree; j++)
+            {
+                b(j) = dofs[i * poly_degree + j];
             }
             auto result = solver.solve(b);
-            for(size_t j = 0; j <poly_degree; j++){
-                coefficient[j]=result(j);
+            for (size_t j = 0; j < poly_degree; j++)
+            {
+                coefficient[j] = result(j);
             }
             coefficients.push_back(coefficient);
         }
