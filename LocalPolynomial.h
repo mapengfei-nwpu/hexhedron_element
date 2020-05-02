@@ -86,11 +86,8 @@ public:
             Point point(
                 coordinates[i][0],
                 coordinates[i][1],
-                coordinates[i][2]
-            );
+                coordinates[i][2]);
             auto items = evaluate_polynomial_items(point);
-        std::cout << coordinates.size() << std::endl;
-
             for (size_t j = 0; j < poly_degree; j++)
             {
                 matrix(i, j) = items[j];

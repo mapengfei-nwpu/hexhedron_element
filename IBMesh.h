@@ -6,7 +6,6 @@ using namespace dolfin;
 
 class IBMesh
 {
-
 public:
 	// Mesh characteristics
 	double x0, x1, y0, y1, z0, z1;
@@ -18,13 +17,14 @@ public:
 	std::vector<std::array<std::size_t, 2>> global_map;
 	Mesh mesh;
 
-	IBMesh(std::array< Point, 2> points,
+	IBMesh(std::array<Point, 2> points,
 		   std::vector<std::size_t> dims,
 		   CellType::Type cell_type = CellType::Type::hexahedron)
 	{
 		/// check cell type.
-		if (cell_type != CellType::Type::hexahedron){
-			std::cout<<"wrong!!\n cell type must be hexahedron!"<<std::endl;
+		if (cell_type != CellType::Type::hexahedron)
+		{
+			std::cout << "wrong!!\n cell type must be hexahedron!" << std::endl;
 		}
 
 		nx = dims[0];
@@ -40,10 +40,10 @@ public:
 
 		// generate mesh
 		mesh = BoxMesh::create(points, {nx, ny, nz}, cell_type = cell_type);
-		std::cout<<"mesh is created!"<<std::endl;
+		std::cout << "mesh is created!" << std::endl;
 
 		top_dim = mesh.topology().dim();
-		mpi_rank =  MPI::rank(mesh.mpi_comm());
+		mpi_rank = MPI::rank(mesh.mpi_comm());
 
 		/// set up global map of this mesh
 		index_mesh();
@@ -51,20 +51,20 @@ public:
 
 	std::vector<std::size_t> get_adjacents(Point point)
 	{
-		
 
 		/// initial neighbours
 		std::vector<std::size_t> adjacents;
 
 		/// test if the point is inside the box
 		if (!(point.x() < x1 && point.x() > x0 &&
-		    point.y() < y1 && point.y() > y0 &&
-			point.z() < z1 && point.z() > z0)){
-				std::cout<<"searching adjacents."<<std::endl;
-				std::cout<<"the point is not inside the box."<<std::endl;
-				return adjacents;
-			}
-	
+			  point.y() < y1 && point.y() > y0 &&
+			  point.z() < z1 && point.z() > z0))
+		{
+			std::cout << "searching adjacents." << std::endl;
+			std::cout << "the point is not inside the box." << std::endl;
+			return adjacents;
+		}
+
 		/// set width of adjacent cells
 		std::size_t global_index = hash(point);
 		int width = 2;
@@ -102,7 +102,7 @@ public:
 	}
 
 	// TODO : will this function create another copy of mesh?
-	std::shared_ptr<Mesh>  mesh_ptr()
+	std::shared_ptr<Mesh> mesh_ptr()
 	{
 		return std::make_shared<Mesh>(mesh);
 	}
@@ -125,7 +125,7 @@ public:
 		// local_map is vector whith 3*cell_num entries.
 		// It contains the global index, local index, mpi rank
 		std::vector<std::size_t> local_map;
-		for ( CellIterator e(mesh); !e.end(); ++e)
+		for (CellIterator e(mesh); !e.end(); ++e)
 		{
 			local_map.push_back(e->global_index());
 			local_map.push_back(mpi_rank);
@@ -137,9 +137,9 @@ public:
 		//        It is a bargain between searching time and memory cost.
 
 		// collect local map on every peocess.
-		std::vector<std::vector<std::size_t>> mpi_collect( MPI::size(mesh.mpi_comm()));
-		 MPI::all_gather(mesh.mpi_comm(), local_map, mpi_collect);
-		
+		std::vector<std::vector<std::size_t>> mpi_collect(MPI::size(mesh.mpi_comm()));
+		MPI::all_gather(mesh.mpi_comm(), local_map, mpi_collect);
+
 		// alloc memory for global map.
 		// global map just resize the collected local index.
 		auto num_cell_global = mesh.num_entities_global(3);
@@ -160,7 +160,7 @@ public:
 
 	// Every point has a unique cell index.
 	// It is consistent with the generation of the mesh.
-	std::size_t hash( Point point)
+	std::size_t hash(Point point)
 	{
 		double x = point.x();
 		double y = point.y();

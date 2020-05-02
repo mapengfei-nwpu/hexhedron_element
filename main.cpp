@@ -20,8 +20,7 @@ public:
 
 int main()
 {
-	size_t nx;
-	std::cin >> nx;
+	size_t nx = 10;
 
 	std::random_device rd;
 	std::uniform_real_distribution<double> uu(0, 1);
@@ -39,10 +38,8 @@ int main()
 
 	LocalPolynomial local_poly;
 	local_poly.function = u;
-	std::cout << "tag" << std::endl;
 	while (true)
 	{
-
 		Point p2(uu(rd), uu(rd), uu(rd));
 		auto global_index = ib_mesh.hash(p2);
 		auto local_index = ib_mesh.global_map[global_index][1];
@@ -54,7 +51,7 @@ int main()
 			<< sqrt(values[1]) << ","
 			<< sqrt(values[2]) << ","
 			<< std::endl;
-		
+
 		std::cout << p2 << std::endl;
 	}
 }
