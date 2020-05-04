@@ -26,7 +26,7 @@ if (HAVE_NO_MULTLINE)
 endif()
 
 # Executable
-add_executable(${PROJECT_NAME} main.cpp)
+add_executable(${PROJECT_NAME} main.cpp LocalPolynomial.cpp IBMesh.cpp IBInterpolation.cpp)
 
 # Target libraries
 target_link_libraries(${PROJECT_NAME} dolfin)
