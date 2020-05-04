@@ -35,7 +35,7 @@ IBMesh::IBMesh(std::array<Point, 2> points,
 	index_mesh();
 }
 
-std::vector<std::size_t> IBMesh::get_adjacents(Point point)
+std::vector<std::size_t> IBMesh::get_adjacents(Point point, int bandwidth)
 {
 
 	/// initial neighbours
@@ -53,16 +53,15 @@ std::vector<std::size_t> IBMesh::get_adjacents(Point point)
 
 	/// set width of adjacent cells
 	std::size_t global_index = hash(point);
-	int width = 2;
 
 	/// search adjacent cells in current mpi processor
 	/// TODO : try to do it with inner method.
 	///        topology might be able to map global index to local index.
-	for (int iz = -width; iz <= width; iz++)
+	for (int iz = -bandwidth; iz <= bandwidth; iz++)
 	{
-		for (int iy = -width; iy <= width; iy++)
+		for (int iy = -bandwidth; iy <= bandwidth; iy++)
 		{
-			for (int ix = -width; ix <= width; ix++)
+			for (int ix = -bandwidth; ix <= bandwidth; ix++)
 			{
 				auto neighbour = static_cast<int>(global_index) + iz * nx * ny + iy * nx + ix;
 				/// excluding unsatisfied cell index.

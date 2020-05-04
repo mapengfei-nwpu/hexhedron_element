@@ -21,7 +21,7 @@ public:
 	IBMesh(std::array<Point, 2> points, std::vector<std::size_t> dims,
 		   CellType::Type cell_type = CellType::Type::hexahedron);
 
-	std::vector<std::size_t> get_adjacents(Point point);
+	std::vector<std::size_t> get_adjacents(Point point, int bandwidth = 3);
 
 	// global index to local index
 	std::array<std::size_t, 2> map(std::size_t i);

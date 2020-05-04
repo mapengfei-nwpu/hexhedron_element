@@ -206,7 +206,7 @@ std::vector<double> DeltaInterplation::solid_to_fluid_raw(
 
 		/// get indices of adjacent cells on fluid mesh.
 		Point solid_point(solid_coordinates[3 * i], solid_coordinates[3 * i + 1], solid_coordinates[3 * i + 2]);
-		auto adjacents = ib_mesh.get_adjacents(solid_point);
+		auto adjacents = ib_mesh.get_adjacents(solid_point, bandwidth);
 
 		/// iterate adjacent cells and collect element nodes in these cells.
 		/// it has nothing to do with cell type.

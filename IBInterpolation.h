@@ -8,7 +8,15 @@
 #include "LocalPolynomial.h"
 namespace dolfin
 {
+/// the usage of DeltaInterpolation:
+/// DeltaInterpolation di(ib_mesh);
+/// di.fluid_to_soild(fluid,solid);
+/// di.solid_to_fluid(fluid,solid);
 
+/// the method for interpolation can be modified:
+/// bandwidth is the bandwidth,
+/// delta is the delta,
+/// they can be modified.
 class DeltaInterplation
 {
 public:
@@ -23,6 +31,7 @@ public:
 
 private:
 	IBMesh &ib_mesh;
+	int bandwidth = 3;
 	std::vector<double> side_lengths;
 
 	/// mid step for solid to fluid interpolation.
