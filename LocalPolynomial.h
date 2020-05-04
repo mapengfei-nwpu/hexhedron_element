@@ -1,3 +1,5 @@
+#ifndef __LOCALPOLYNOMIAL_H
+#define __LOCALPOLYNOMIAL_H
 #include <map>
 #include <vector>
 #include <dolfin.h>
@@ -142,3 +144,4 @@ public:
         return values;
     }
 };
+#endif

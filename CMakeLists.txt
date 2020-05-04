@@ -1,7 +1,7 @@
 # Require CMake 3.5
 cmake_minimum_required(VERSION 3.5)
 
-set(PROJECT_NAME hexahedron_evaluation)
+set(PROJECT_NAME local_polynomial)
 project(${PROJECT_NAME})
 
 # Set CMake behavior

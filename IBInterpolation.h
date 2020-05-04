@@ -1,9 +1,11 @@
+#ifndef _IBINTERPOLATION_H_
+#define _IBINTERPOLATION_H_
 #include <dolfin.h>
 #include <dolfin/geometry/SimplexQuadrature.h>
 #include <numeric>
 #include <ctime>
 #include "IBMesh.h"
-#include "HexahedronEvaluation.h"
+#include "LocalPolynomial.h"
 using namespace dolfin;
 
 template <typename T>
@@ -116,10 +118,11 @@ public:
 		auto global_solid_size = solid.function_space()->dim();
 		auto mpi_rank = MPI::rank(fluid.function_space()->mesh()->mpi_comm());
 
-		/// I wrote it and it is for hexahedron evaluation.
-		/// it is only for second order element with any value size.
-		HexaheronEvaluation hexa_eval;
-		hexa_eval.evaluate_basis_coefficients();
+		/// Initial local polynomial object. If the function is wanted to be
+		/// evaluated on a point in a cell, local_poly will construct a polynomial
+		/// function on this cell and store its coefficients. 
+		LocalPolynomial local_poly;
+		local_poly.function = fluid;
 
 		/// calculate global dof coordinates and dofs of solid.
 		std::vector<std::array<double, 3>> solid_dof_coordinates = get_global_dof_coordinates(solid);
@@ -136,10 +139,9 @@ public:
 			if (mpi_rank_and_local_index[0] == mpi_rank)
 			{
 				/// Find the dolfin cell where point reside.
+				/// Then, evaluate it.
 				auto local_index = mpi_rank_and_local_index[1];
-				Cell cell(*mesh, local_index);
-
-				auto values = hexa_eval.eval(point, cell, fluid);
+				auto values = local_poly.eval(point, local_index);
 
 				solid_local_values[i * 3] = values[0];
 				solid_local_values[i * 3 + 1] = values[1];
@@ -308,3 +310,4 @@ public:
 	//  thses methods must not be modified!!  ///
 	/////////////////////////////////////////////
 };
+#endif

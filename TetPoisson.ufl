@@ -1,0 +1,8 @@
+element = VectorElement("Lagrange", tetrahedron, 2)
+
+u = TrialFunction(element)
+v = TestFunction(element)
+f = Coefficient(element)
+
+a = inner(u,v)*dx
+L = inner(f,v)*dx
