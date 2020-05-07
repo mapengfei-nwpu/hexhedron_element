@@ -16,7 +16,7 @@ nu = 0.01
 # Define variational problem
 (u, p) = TrialFunctions(W)
 (v, q) = TestFunctions(W)
-F = inner((u-un)/k, v)*dx + inner(grad(un)*un, v)*dx(degree=5) + nu * \
+F = inner((u-un)/k, v)*dx + inner(grad(un)*un, v)*dx + nu * \
     inner(grad(u), grad(v))*dx - div(v)*p * \
     dx + q*div(u)*dx - inner(f, v)*dx
 a = lhs(F)

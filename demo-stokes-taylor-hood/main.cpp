@@ -1,4 +1,5 @@
 #include <dolfin.h>
+#include <algorithm>
 #include "IBMesh.h"
 #include "NavierStokes.h"
 
@@ -9,7 +10,7 @@ class NoslipDomain : public SubDomain
 {
 	bool inside(const Array<double> &x, bool on_boundary) const
 	{
-		return near(x[0], 0) || near(x[0], 1.0) || near(x[1], 0) || near(x[1], 1.0) || near(x[2], 0.0);
+		return near(x[0], 0) || near(x[0], 1.0) || near(x[2], 0.0);
 	}
 };
 
@@ -73,6 +74,12 @@ int main()
 	auto wn = Function(W);
 	auto un = std::make_shared<Function>(wn[0]);
 	auto pn = std::make_shared<Function>(wn[1]);
+	// *** -------------------------------------------------------------------------
+	// *** Error:   Unable to create function.
+	// *** Reason:  Cannot be created from subspace. Consider collapsing the function space.
+	// *** Where:   This error was encountered inside Function.cpp.
+	// *** Process: 0
+	// *** -------------------------------------------------------------------------
 	std::cout << "tag." << std::endl;
 
 	// Define variational problem
@@ -112,10 +119,13 @@ int main()
 
 
 		// Output velocity and pressure
+		/// *** -------------------------------------------------------------------------
 		/// *** Error:   Unable to initialize vector of degrees of freedom for function.
 		/// *** Reason:  Cannot re-initialize a non-empty vector. Consider creating a new function.
 		/// *** Where:   This error was encountered inside Function.cpp.
 		/// *** Process: 0
+		/// *** -------------------------------------------------------------------------
+
 		Function u_ = w[0];
 		Function p_ = w[1];
 		ufile << u_;
@@ -123,6 +133,9 @@ int main()
 
 		// update velocity
 		*un->vector() = *u_.vector();
+		std::vector<double> v;
+		un->vector()->get_local(v);
+		std::cout<<*max_element(v.begin(),v.end())<<std::endl;
 	}
 	return 0;
 }
