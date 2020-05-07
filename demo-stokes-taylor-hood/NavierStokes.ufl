@@ -1,0 +1,23 @@
+# hexahedron
+
+P2 = VectorElement("Lagrange", hexahedron, 2)
+P1 = FiniteElement("Lagrange", hexahedron, 1)
+W = P2 * P1
+
+(u, p) = TrialFunctions(W)
+(v, q) = TestFunctions(W)
+
+un = Coefficient(P2)
+f = Coefficient(P2)
+k = Constant(hexahedron)
+
+nu = 0.01
+
+# Define variational problem
+(u, p) = TrialFunctions(W)
+(v, q) = TestFunctions(W)
+F = inner((u-un)/k, v)*dx + inner(grad(un)*un, v)*dx(degree=5) + nu * \
+    inner(grad(u), grad(v))*dx - div(v)*p * \
+    dx + q*div(u)*dx - inner(f, v)*dx
+a = lhs(F)
+L = rhs(F)
