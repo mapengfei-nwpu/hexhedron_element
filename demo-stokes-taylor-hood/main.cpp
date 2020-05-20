@@ -1,6 +1,6 @@
 #include <dolfin.h>
 #include <algorithm>
-#include "IBMesh.h"
+/// #include "IBMesh.h"
 #include "NavierStokes.h"
 
 using namespace dolfin;
@@ -35,16 +35,16 @@ class PinpointDomain : public SubDomain
 int main()
 {
 	// set time variables
-	double dt = 0.01;
+	double dt = 0.005;
 	double T = 10;
 
 	// Read mesh and sub domain markers
 	Point p0(0, 0, 0);
 	Point p1(1, 1, 1);
-	IBMesh ib_mesh({p0, p1}, {16, 16, 16});
+    auto mesh = std::make_shared<Mesh>(BoxMesh::create({p0, p1}, {16, 16, 16},CellType::Type::tetrahedron));
 
 	// Create function space
-	auto W = std::make_shared<NavierStokes::FunctionSpace>(ib_mesh.mesh_ptr());
+	auto W = std::make_shared<NavierStokes::FunctionSpace>(mesh);
 
 	// Define subdomains for boundary conditions
 	auto noslip_domain = std::make_shared<NoslipDomain>();

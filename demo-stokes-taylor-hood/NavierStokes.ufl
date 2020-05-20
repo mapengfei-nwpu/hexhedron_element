@@ -1,7 +1,8 @@
-# hexahedron
+# tetrahedron
+# tetrahedron
 
-P2 = VectorElement("Lagrange", hexahedron, 2)
-P1 = FiniteElement("Lagrange", hexahedron, 1)
+P2 = VectorElement("Lagrange", tetrahedron, 2)
+P1 = FiniteElement("Lagrange", tetrahedron, 1)
 W = P2 * P1
 
 (u, p) = TrialFunctions(W)
@@ -9,7 +10,7 @@ W = P2 * P1
 
 un = Coefficient(P2)
 f = Coefficient(P2)
-k = Constant(hexahedron)
+k = Constant(tetrahedron)
 
 nu = 0.01
 
