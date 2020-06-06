@@ -31,7 +31,7 @@ int main()
 	Function u(U);
 	u.interpolate(*g);
 
-	Point p2(0.225, 0.425, 0.925);
+	Point p2(0.2005, 0.425, 0.925);
 	auto global_index = ib_mesh.hash(p2);
 	auto local_index  = ib_mesh.global_map[global_index][1];
 	Cell cell(*mesh, local_index);
@@ -53,7 +53,7 @@ int main()
 		std::cout<<"values: "
 		<<u.vector()->getitem(i)<<std::endl;
 	}
-	*/
+*/
 
 
 	

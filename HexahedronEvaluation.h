@@ -9,15 +9,15 @@ public:
     /// 27 vertices.
     /// 27x27 parameters.
     std::vector<double> reference_coordinates = {
-        0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.5,
-        0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 1.0, 0.5,
-        0.0, 0.5, 0.0, 0.0, 0.5, 1.0, 0.0, 0.5, 0.5,
-        1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 0.5,
-        1.0, 1.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.5,
-        1.0, 0.5, 0.0, 1.0, 0.5, 1.0, 1.0, 0.5, 0.5,
-        0.5, 0.0, 0.0, 0.5, 0.0, 1.0, 0.5, 0.0, 0.5,
-        0.5, 1.0, 0.0, 0.5, 1.0, 1.0, 0.5, 1.0, 0.5,
-        0.5, 0.5, 0.0, 0.5, 0.5, 1.0, 0.5, 0.5, 0.5};
+        -1.0, -1.0, -1.0, -1.0, -1.0, 1.0, -1.0, -1.0, 0.0,
+        -1.0, 1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 0.0,
+        -1.0, 0.0, -1.0, -1.0, 0.0, 1.0, -1.0, 0.0, 0.0,
+        1.0, -1.0, -1.0, 1.0, -1.0, 1.0, 1.0, -1.0, 0.0,
+        1.0, 1.0, -1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0,
+        1.0, 0.0, -1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 0.0,
+        0.0, -1.0, -1.0, 0.0, -1.0, 1.0, 0.0, -1.0, 0.0,
+        0.0, 1.0, -1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 0.0,
+        0.0, 0.0, -1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0};
     std::vector<std::vector<double>> coefficients;
 
     std::array<double, 27> evaluate_polynomial_items(Point point)
@@ -106,21 +106,21 @@ public:
         Point pa(coordinate_dofs[0], coordinate_dofs[1], coordinate_dofs[2]);
         Point pb(coordinate_dofs[21], coordinate_dofs[22], coordinate_dofs[23]);
         Point reference_point(
-            (point.x() - pa.x()) / (pb.x() - pa.x()),
-            (point.y() - pa.y()) / (pb.y() - pa.y()),
-            (point.z() - pa.z()) / (pb.z() - pa.z()));
-        std::cout << "coordinate_dofs:";
-        for (size_t i; i < coordinate_dofs.size() / 3; i++)
-        {
-            std::cout << coordinate_dofs[3 * i]
-                      << coordinate_dofs[3 * i + 1]
-                      << coordinate_dofs[3 * i + 2]
-                      << std::endl;
-        }
-        std::cout << "pa :" << pa << std::endl;
-        std::cout << "pb :" << pb << std::endl;
-        std::cout << "local point :" << point << std::endl;
-        std::cout << "reference point :" << reference_point << std::endl;
+            (point.x() - pa.x()) / (pb.x() - pa.x())*2.0 - 1.0,
+            (point.y() - pa.y()) / (pb.y() - pa.y())*2.0 - 1.0,
+            (point.z() - pa.z()) / (pb.z() - pa.z())*2.0 - 1.0);
+        /// std::cout << "coordinate_dofs:";
+        /// for (size_t i; i < coordinate_dofs.size() / 3; i++)
+        /// {
+        ///    std::cout << coordinate_dofs[3 * i]
+        ///              << coordinate_dofs[3 * i + 1]
+        ///              << coordinate_dofs[3 * i + 2]
+        ///              << std::endl;
+        /// }
+        /// std::cout << "pa :" << pa << std::endl;
+        /// std::cout << "pb :" << pb << std::endl;
+        /// std::cout << "local point :" << point << std::endl;
+        /// std::cout << "reference point :" << reference_point << std::endl;
         return reference_point;
     }
 
@@ -140,15 +140,15 @@ public:
             // Pick values from vector(s)
             function.vector()->get_local(dofs.data(), cell_dofmap.size(), cell_dofmap.data());
         }
-        std::cout << "dofs:" << std::endl;
-        std::cout << "dofs size:" << dofs.size() << std::endl;
-        for (size_t i; i < dofs.size() / 3; i++)
-        {
-            std::cout << dofs[3 * i] << ", "
-                      << dofs[3 * i + 1] << ", "
-                      << dofs[3 * i + 2] << ", "
-                      << std::endl;
-        }
+        /// std::cout << "dofs:" << std::endl;
+        /// std::cout << "dofs size:" << dofs.size() << std::endl;
+        /// for (size_t i; i < dofs.size() / 3; i++)
+        /// {
+        ///     std::cout << dofs[3 * i] << ", "
+        ///               << dofs[3 * i + 1] << ", "
+        ///               << dofs[3 * i + 2] << ", "
+        ///               << std::endl;
+        /// }
         auto reference_point = transform_to_reference_point(cell, point);
         auto polynomial_items = evaluate_polynomial_items(reference_point);
 

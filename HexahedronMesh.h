@@ -175,4 +175,3 @@ public:
 		return k * nx * ny + j * nx + i;
 	}
 };
-#endif
